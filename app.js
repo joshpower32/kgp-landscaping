@@ -16,8 +16,8 @@ const CONFIG = {
   // Get a FREE key at https://web3forms.com — enter the client's email, then
   // paste the key here. Quote requests then email the client automatically.
   // Until it's set, the form opens the visitor's email app as a fallback.
-  web3formsKey: "YOUR_WEB3FORMS_ACCESS_KEY",
-  contactEmail: "hello@kgplandscaping.example", // fallback recipient + shown on errors
+  web3formsKey: "a8ef39e0-3aa6-410d-ae9e-79ea37995540",
+  contactEmail: "joshpower32@hotmail.com", // fallback recipient + shown on errors
   businessName: "K.G.P Landscaping & Property Maintenance",
 };
 
