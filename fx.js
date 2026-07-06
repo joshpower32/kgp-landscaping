@@ -18,21 +18,35 @@
   "use strict";
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- Scroll reveals ---------- */
-  const revealEls = document.querySelectorAll("[data-fx]");
+  /* ---------- Scroll reveals ----------
+     Simple scroll + rAF visibility check. Chosen over IntersectionObserver
+     because IO's initial callback can miss above-the-fold content on some
+     first paints — leaving a hero invisible. This reveals in-view content
+     immediately and can never leave an element stuck hidden. */
+  const revealEls = Array.from(document.querySelectorAll("[data-fx]"));
   revealEls.forEach((el) => {
     const d = el.getAttribute("data-fx-delay");
     if (d) el.style.setProperty("--fx-delay", d + "ms");
   });
-  if (reduced || !("IntersectionObserver" in window)) {
+  if (reduced) {
     revealEls.forEach((el) => el.classList.add("fx-in"));
   } else {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("fx-in"); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
-    revealEls.forEach((el) => io.observe(el));
+    const vh = () => window.innerHeight || document.documentElement.clientHeight;
+    let pending = revealEls.slice();
+    const check = () => {
+      for (let i = pending.length - 1; i >= 0; i--) {
+        const r = pending[i].getBoundingClientRect();
+        if (r.top < vh() * 0.92 && r.bottom > 0) { pending[i].classList.add("fx-in"); pending.splice(i, 1); }
+      }
+      if (!pending.length) { window.removeEventListener("scroll", check); window.removeEventListener("resize", check); }
+    };
+    // Direct handler (no requestAnimationFrame) so reveals fire even where rAF is
+    // throttled; the work is trivial for a handful of elements and self-removes
+    // once everything is shown.
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check, { passive: true });
+    check();                 // reveal above-the-fold right away
+    setTimeout(check, 300);  // re-check after late layout (fonts/images)
   }
 
   /* ---------- Animated counters ---------- */
