@@ -98,7 +98,7 @@ const itemImage = (item, w = 640) =>
 function mediaHTML(item, seed) {
   const url = itemImage(item);
   const credit = !item.image && PEXELS_PHOTOS[item.query]?.p;
-  if (url) return `<img src="${esc(url)}" alt="${esc(item.name || item.title)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy" onerror="this.outerHTML = placeholderSVG(${seed})">`;
+  if (url) return `<img src="${esc(url)}" alt="${esc(item.name || item.title)}"${credit ? ` title="Photo: ${esc(credit)} / Pexels"` : ""} loading="lazy" decoding="async" onerror="this.outerHTML = placeholderSVG(${seed})">`;
   return placeholderSVG(seed);
 }
 

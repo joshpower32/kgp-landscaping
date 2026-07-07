@@ -15,7 +15,11 @@
     <meta property="og:image" content="assets/cedar-fence-garden-bed.jpg">
     <meta property="og:locale" content="en_CA">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="K.G.P Landscaping &amp; Property Maintenance — Hamilton, ON">
+    <meta name="twitter:description" content="Lawn care, landscaping, snow removal &amp; property maintenance across Hamilton, Stoney Creek, Winona &amp; Grimsby. 5.0★ on Google. Free estimates.">
+    <meta name="twitter:image" content="assets/cedar-fence-garden-bed.jpg">
 
+    <link rel="canonical" href="https://joshpower32.github.io/kgp-landscaping/">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="favicon.svg">
     <link rel="preconnect" href="https://images.pexels.com">
@@ -74,6 +78,7 @@
 
     <!-- ===== Hero ===== -->
     <section class="hero" id="hero">
+        <canvas id="heroCanvas" aria-hidden="true"></canvas>
         <div class="hero-overlay"></div>
         <div class="wrap hero-inner">
             <p class="eyebrow" data-fx>Locally owned &amp; operated · Hamilton, Ontario</p>
@@ -88,18 +93,18 @@
         <a class="scroll-cue" href="#services" aria-label="Scroll to services">&#8964;</a>
     </section>
 
-    <!-- ===== Trust strip ===== -->
+    <!-- ===== Trust strip / stats ===== -->
     <section class="trust">
         <div class="wrap trust-inner">
-            <div class="trust-item"><b>5.0 &#9733; Google</b><small>Rated by local customers</small></div>
-            <div class="trust-item"><b>Locally owned</b><small>Hamilton &amp; area</small></div>
-            <div class="trust-item"><b>Free estimates</b><small>No-obligation quotes</small></div>
-            <div class="trust-item"><b>Year-round service</b><small>Lawn care to snow removal</small></div>
+            <div class="trust-item" data-fx><b>5.0 &#9733; Google</b><small>Rated by local customers</small></div>
+            <div class="trust-item" data-fx data-fx-delay="60"><b><span data-count-to="12">0</span>+ Years</b><small>Serving Hamilton &amp; area</small></div>
+            <div class="trust-item" data-fx data-fx-delay="120"><b><span data-count-to="500">0</span>+ Jobs</b><small>Completed and counting</small></div>
+            <div class="trust-item" data-fx data-fx-delay="180"><b>Year-round</b><small>Lawn care to snow removal</small></div>
         </div>
     </section>
 
     <!-- ===== Services ===== -->
-    <section id="services" class="section">
+    <section id="services" class="section cv-auto">
         <div class="wrap">
             <div class="section-head" data-fx>
                 <h2>What we do</h2>
@@ -110,7 +115,7 @@
     </section>
 
     <!-- ===== Projects gallery ===== -->
-    <section id="projects" class="section section-dark">
+    <section id="projects" class="section section-dark cv-auto">
         <div class="wrap">
             <div class="section-head section-head--light" data-fx>
                 <h2>Recent projects</h2>
@@ -122,7 +127,7 @@
     </section>
 
     <!-- ===== Full-bleed parallax strip ===== -->
-    <section class="strip">
+    <section class="strip cv-auto">
         <div class="strip-bg" data-parallax style="background-image:url('assets/backyard-sod-install.jpg')"></div>
         <div class="strip-overlay"></div>
         <div class="wrap strip-inner">
@@ -131,7 +136,7 @@
     </section>
 
     <!-- ===== Process ===== -->
-    <section id="process" class="section">
+    <section id="process" class="section cv-auto">
         <div class="wrap">
             <div class="section-head" data-fx>
                 <h2>How it works</h2>
@@ -147,7 +152,7 @@
     </section>
 
     <!-- ===== Reviews ===== -->
-    <section id="reviews" class="section section-tint">
+    <section id="reviews" class="section section-tint cv-auto">
         <div class="wrap">
             <div class="section-head" data-fx>
                 <h2>What our clients say</h2>
@@ -162,9 +167,9 @@
     </section>
 
     <!-- ===== Quote request / Contact ===== -->
-    <section id="contact" class="section">
+    <section id="contact" class="section cv-auto">
         <div class="wrap contact-grid">
-            <div class="contact-info">
+            <div class="contact-info" data-fx>
                 <h2>Request a free estimate</h2>
                 <p>Tell us about your property and we'll get back to you within one business day.</p>
                 <ul class="contact-list">
@@ -175,7 +180,7 @@
                     <li><b>Google rating</b>5.0 &#9733;&#9733;&#9733;&#9733;&#9733;</li>
                 </ul>
             </div>
-            <form class="quote-form" id="quoteForm">
+            <form class="quote-form" id="quoteForm" data-fx data-fx-delay="80">
                 <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none !important" aria-hidden="true">
                 <div class="field"><label>Name<input name="name" required></label></div>
                 <div class="field-row">
@@ -196,7 +201,7 @@
                 </div>
                 <div class="field"><label>Preferred start<input type="date" name="date"></label></div>
                 <div class="field"><label>Details<textarea name="message" rows="3" placeholder="Tell us about your property and what you need…"></textarea></label></div>
-                <button type="submit" class="btn btn-primary btn-block">Send my request</button>
+                <button type="submit" class="btn btn-primary btn-block" data-magnetic>Send my request</button>
                 <p class="fineprint" id="quoteNote">We'll only use your details to reply about your project — no spam.</p>
             </form>
         </div>
@@ -207,7 +212,7 @@
         <div class="wrap footer-grid">
             <div>
                 <a href="#top" class="brand brand--footer">
-                    <img src="assets/kgp-logo.jpg" alt="K.G.P Landscaping logo" class="brand-logo-img">
+                    <img src="assets/kgp-logo.jpg" alt="K.G.P Landscaping logo" class="brand-logo-img" decoding="async">
                     <span class="brand-name">K.G.P<small>Landscaping &amp; Property Maintenance</small></span>
                 </a>
                 <p class="muted">Landscaping &amp; property maintenance,<br>Hamilton, Ontario.</p>
@@ -225,7 +230,7 @@
         <span class="lightbox-close" aria-label="Close">&times;</span>
         <button class="lightbox-arrow lightbox-prev" id="lightbox-prev" aria-label="Previous photo">&#10094;</button>
         <figure class="lightbox-stage">
-            <img id="lightbox-img" src="" alt="">
+            <img id="lightbox-img" src="" alt="" decoding="async">
             <figcaption class="lightbox-meta">
                 <span id="lightbox-caption"></span>
                 <span id="lightbox-counter" class="lightbox-count"></span>
@@ -247,5 +252,6 @@
 
     <script src="app.js"></script>
     <script src="fx.js"></script>
+    <script type="module" src="three-scene.js"></script>
 </body>
 </html>

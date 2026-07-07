@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://joshpower32.github.io/kgp-landscaping/sitemap.xml

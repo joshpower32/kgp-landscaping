@@ -63,6 +63,9 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1
 [data-tilt]:hover::after { opacity: 1; }
 [data-magnetic] { transition: transform .15s ease; }
 
+/* Perf: skip layout/paint work for below-the-fold sections until near viewport */
+.cv-auto { content-visibility: auto; contain-intrinsic-size: auto 720px; }
+
 .strip { position: relative; height: 320px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .strip-bg { position: absolute; inset: -60px 0; background-size: cover; background-position: center; }
 .strip-overlay { position: absolute; inset: 0; background: linear-gradient(rgba(16,22,15,.5), rgba(16,22,15,.68)); }
@@ -97,12 +100,14 @@ h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1
 .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--ink); margin-left: auto; }
 
 /* ---------- Hero ---------- */
-.hero { position: relative; color: #fff; padding: 132px 0 116px; min-height: 88vh; display: flex; align-items: center; background-size: cover; background-position: center; background-color: var(--dark); }
+.hero { position: relative; color: #fff; padding: 132px 0 116px; min-height: 88vh; display: flex; align-items: center; background-size: cover; background-position: center; background-color: var(--dark); overflow: hidden; }
+/* Sunlit pollen-drift canvas: sits above the job-site photo, below the scrim + copy */
+#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
 /* Layered scrim: vertical depth + left-anchored darkness so text stays crisp over any photo */
-.hero-overlay { position: absolute; inset: 0; background:
+.hero-overlay { position: absolute; inset: 0; z-index: 1; background:
     linear-gradient(180deg, rgba(9,13,8,.55) 0%, rgba(9,13,8,.28) 34%, rgba(9,13,8,.82) 100%),
     linear-gradient(100deg, rgba(9,13,8,.92) 0%, rgba(9,13,8,.66) 46%, rgba(9,13,8,.34) 100%); }
-.hero-inner { position: relative; max-width: 680px; }
+.hero-inner { position: relative; z-index: 2; max-width: 680px; }
 .hero h1 { font-size: clamp(2.6rem, 6.2vw, 4.3rem); margin: 0 0 .7rem; color: #fff; text-shadow: 0 2px 24px rgba(0,0,0,.35); }
 .hero .eyebrow { color: var(--accent); text-shadow: 0 1px 12px rgba(0,0,0,.4); }
 .lede { font-size: 1.22rem; color: #eef2ea; margin: 0 0 1.9rem; max-width: 560px; text-shadow: 0 1px 16px rgba(0,0,0,.35); }
