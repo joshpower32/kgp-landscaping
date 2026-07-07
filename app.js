@@ -17,7 +17,7 @@ const CONFIG = {
   // paste the key here. Quote requests then email the client automatically.
   // Until it's set, the form opens the visitor's email app as a fallback.
   web3formsKey: "a8ef39e0-3aa6-410d-ae9e-79ea37995540",
-  contactEmail: "joshpower32@hotmail.com", // fallback recipient + shown on errors
+  contactEmail: "kgplandscaping@gmail.com", // KGP's public email — mailto fallback + shown on errors
   businessName: "K.G.P Landscaping & Property Maintenance",
 };
 
