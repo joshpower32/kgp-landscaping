@@ -38,17 +38,20 @@ const SERVICES = [
     points: ["Seasonal cleanups (spring & fall)", "Hedge and shrub trimming", "Yard waste and debris removal", "Gutter cleaning", "Custom maintenance plans for landlords & businesses"] },
 ];
 
-// Project gallery — cat drives the filter chips
+// Project gallery — cat drives the filter chips.
+// Gallery uses hi-res Pexels placeholders (crisp at fullscreen). KGP's real
+// photos stay in assets/ for the hero + service cards; swap them back in
+// here via `image:` once KGP provides high-resolution originals.
 const PROJECTS = [
-  { id: "p1", title: "Circular gravel driveway",     cat: "Landscaping", query: "gravel driveway landscaping", image: "assets/gravel-circular-driveway.jpg" },
-  { id: "p2", title: "Backyard sod installation",    cat: "Landscaping", query: "new sod backyard", image: "assets/backyard-sod-install.jpg" },
-  { id: "p3", title: "Fresh cut front lawn",         cat: "Lawn Care",   query: "manicured front lawn", image: "assets/fresh-cut-front-lawn.jpg" },
-  { id: "p4", title: "Stone paver walkway",          cat: "Landscaping", query: "stone paver walkway garden", image: "assets/stone-paver-walkway.jpg" },
+  { id: "p1", title: "Gravel driveway & lawn edge",  cat: "Landscaping", query: "gravel driveway landscaping" },
+  { id: "p2", title: "Backyard sod installation",    cat: "Landscaping", query: "new sod backyard" },
+  { id: "p3", title: "Fresh cut front lawn",         cat: "Lawn Care",   query: "manicured front lawn" },
+  { id: "p4", title: "Stone paver walkway",          cat: "Landscaping", query: "stone paver walkway garden" },
   { id: "p5", title: "Weekly lawn mowing",           cat: "Lawn Care",   query: "lawn mowing stripes" },
   { id: "p6", title: "Driveway snow clearing",       cat: "Snow Removal",query: "snow removal driveway plow truck" },
-  { id: "p7", title: "Garden bed design",            cat: "Property Maintenance", query: "garden bed mulch cleanup", image: "assets/circular-garden-bed.jpg" },
+  { id: "p7", title: "Garden bed & planting",        cat: "Property Maintenance", query: "garden bed mulch cleanup" },
   { id: "p8", title: "Hedge trimming & edging",      cat: "Property Maintenance", query: "hedge trimming yard" },
-  { id: "p9", title: "Cedar fence garden bed",       cat: "Landscaping", query: "backyard patio lawn", image: "assets/cedar-fence-garden-bed.jpg" },
+  { id: "p9", title: "Backyard patio & pergola",     cat: "Landscaping", query: "backyard pergola landscaping" },
 ];
 
 // --- Demo photos: pinned Pexels shots, keyed by each item's `query` -----
@@ -68,6 +71,7 @@ const PEXELS_PHOTOS = {
   "garden bed mulch cleanup": { u: "https://images.pexels.com/photos/5231083/pexels-photo-5231083.jpeg", p: "Pexels" },
   "hedge trimming yard": { u: "https://images.pexels.com/photos/24595772/pexels-photo-24595772.jpeg", p: "Pexels" },
   "backyard patio lawn": { u: "https://images.pexels.com/photos/32103585/pexels-photo-32103585.jpeg", p: "Pexels" },
+  "backyard pergola landscaping": { u: "https://images.pexels.com/photos/13871294/pexels-photo-13871294.jpeg", p: "Pexels" },
   "landscaped backyard lawn": { u: "https://images.pexels.com/photos/13871294/pexels-photo-13871294.jpeg", p: "Pexels" },
 };
 // Size an image via Pexels CDN params (w = target width in px)
@@ -161,33 +165,80 @@ function renderFilters() {
   filtersEl.querySelectorAll(".filter-chip").forEach((b) =>
     b.addEventListener("click", () => { activeCat = b.dataset.cat; renderFilters(); renderGallery(); }));
 }
+let visibleList = [];   // the currently filtered projects, in gallery order
 function renderGallery() {
-  const list = PROJECTS.filter((p) => activeCat === "All" || p.cat === activeCat);
-  galleryEl.innerHTML = list.map((p, i) => `
-    <figure class="gallery-item" data-id="${p.id}" data-full="${esc(itemImage(p, 1600) || "")}" data-tilt tabindex="0" role="button" aria-label="View ${esc(p.title)}">
+  visibleList = PROJECTS.filter((p) => activeCat === "All" || p.cat === activeCat);
+  galleryEl.innerHTML = visibleList.map((p, i) => `
+    <figure class="gallery-item" data-index="${i}" data-tilt tabindex="0" role="button" aria-label="View ${esc(p.title)}">
       ${mediaHTML(p, i + 1)}
       <figcaption class="gallery-cap">${esc(p.title)}</figcaption>
     </figure>`).join("");
 }
 
-// --- Lightbox -----------------------------------------------------------
+// --- Lightbox: fullscreen slideshow with arrows / keys / swipe ----------
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
-function openLightbox(src, alt) {
+const lbCaption = document.getElementById("lightbox-caption");
+const lbCounter = document.getElementById("lightbox-counter");
+let lbIndex = 0;
+
+function lbShow(i) {
+  const n = visibleList.length;
+  if (!n) return;
+  lbIndex = ((i % n) + n) % n;                      // wrap both directions
+  const p = visibleList[lbIndex];
+  const src = itemImage(p, 1920);                   // full-res for big screens
   if (!src) return;
-  lightboxImg.src = src; lightboxImg.alt = alt || "";
+  lightboxImg.classList.add("switching");
+  const pre = new Image();
+  pre.onload = () => {
+    lightboxImg.src = src; lightboxImg.alt = p.title;
+    lightboxImg.classList.remove("switching");
+  };
+  pre.src = src;
+  lbCaption.textContent = p.title;
+  lbCounter.textContent = `${lbIndex + 1} / ${n}`;
+  // hint the neighbours into cache so arrows feel instant
+  [lbIndex + 1, lbIndex - 1].forEach((j) => {
+    const q = visibleList[((j % n) + n) % n];
+    const u = q && itemImage(q, 1920);
+    if (u) { const im = new Image(); im.src = u; }
+  });
+}
+function openLightbox(i) {
+  lbShow(i);
   lightbox.classList.add("show"); document.body.style.overflow = "hidden";
 }
 function closeLightbox() { lightbox.classList.remove("show"); lightboxImg.src = ""; document.body.style.overflow = ""; }
+
 galleryEl.addEventListener("click", (e) => {
   const item = e.target.closest(".gallery-item");
-  if (item) openLightbox(item.dataset.full, item.querySelector("figcaption")?.textContent);
+  if (item) openLightbox(+item.dataset.index);
 });
 galleryEl.addEventListener("keydown", (e) => {
   const item = e.target.closest(".gallery-item");
-  if (item && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openLightbox(item.dataset.full, item.querySelector("figcaption")?.textContent); }
+  if (item && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openLightbox(+item.dataset.index); }
 });
-lightbox.addEventListener("click", (e) => { if (e.target !== lightboxImg) closeLightbox(); });
+document.getElementById("lightbox-prev").addEventListener("click", (e) => { e.stopPropagation(); lbShow(lbIndex - 1); });
+document.getElementById("lightbox-next").addEventListener("click", (e) => { e.stopPropagation(); lbShow(lbIndex + 1); });
+lightbox.addEventListener("click", (e) => {
+  if (e.target === lightboxImg || e.target.closest(".lightbox-arrow")) return;
+  closeLightbox();
+});
+document.addEventListener("keydown", (e) => {
+  if (!lightbox.classList.contains("show")) return;
+  if (e.key === "ArrowRight") lbShow(lbIndex + 1);
+  if (e.key === "ArrowLeft") lbShow(lbIndex - 1);
+});
+// Touch swipe between photos
+let lbTouchX = null;
+lightbox.addEventListener("touchstart", (e) => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lightbox.addEventListener("touchend", (e) => {
+  if (lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 48) lbShow(lbIndex + (dx < 0 ? 1 : -1));
+  lbTouchX = null;
+}, { passive: true });
 
 // --- Quote form (real delivery via Web3Forms) ---------------------------
 const KEY_PLACEHOLDER = "YOUR_WEB3FORMS_ACCESS_KEY";
@@ -229,12 +280,20 @@ document.getElementById("quoteForm").addEventListener("submit", async (e) => {
 // --- Mobile nav + misc --------------------------------------------------
 const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
-navToggle.addEventListener("click", () => {
-  const open = navLinks.classList.toggle("open");
+function setNav(open) {
+  navLinks.classList.toggle("open", open);
   navToggle.setAttribute("aria-expanded", open);
+  navToggle.textContent = open ? "✕" : "☰";
+}
+navToggle.addEventListener("click", (e) => { e.stopPropagation(); setNav(!navLinks.classList.contains("open")); });
+navLinks.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setNav(false)));
+// Tap anywhere outside the menu to close it
+document.addEventListener("pointerdown", (e) => {
+  if (navLinks.classList.contains("open") && !navLinks.contains(e.target) && !navToggle.contains(e.target)) setNav(false);
 });
-navLinks.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => navLinks.classList.remove("open")));
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { closeLightbox(); setNav(false); }
+});
 
 let toastTimer;
 function toast(msg) {
