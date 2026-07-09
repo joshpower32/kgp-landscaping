@@ -5,13 +5,14 @@
    • Brand/colours: :root tokens in styles.css + brand text in index.html.
    • Services & projects: edit the SERVICES and PROJECTS arrays below.
    • Real photos: give an item an `image:` path (e.g. "assets/driveway.jpg")
-     to override the Pexels placeholder — drop in KGP's real project photos here.
+     to override the Pexels placeholder — drop in KGP's real project photos
+     once they can supply high-resolution originals (their current photos are
+     low-res GBP downloads, so this demo runs entirely on Pexels for now).
    • Quote form: see quoteForm handler — wire to email (Web3Forms) or Firebase.
    ===================================================================== */
 
 const CONFIG = {
   heroQuery: "landscaped backyard lawn",
-  heroImage: "assets/cedar-fence-garden-bed.jpg", // real KGP job photo
   // === LEAD DELIVERY (set this before selling the site) ===============
   // Get a FREE key at https://web3forms.com — enter the client's email, then
   // paste the key here. Quote requests then email the client automatically.
@@ -23,11 +24,9 @@ const CONFIG = {
 
 const SERVICES = [
   { id: "lawn-care", name: "Lawn Care & Mowing", desc: "Weekly mowing, edging, trimming, and lawn health programs.", query: "lawn mowing green grass",
-    image: "assets/fresh-cut-front-lawn.jpg",
     lead: "Keep your lawn thick, green, and neatly kept all season long with regular care from a local crew.",
     points: ["Weekly or bi-weekly mowing", "Edging, trimming, and cleanup", "Fertilizing and weed control", "Aeration and overseeding", "Seasonal spring and fall cleanups"] },
   { id: "landscaping", name: "Landscaping & Design", desc: "Sod installation, garden beds, and full yard transformations.", query: "landscaping garden design yard",
-    image: "assets/circular-garden-bed.jpg",
     lead: "From a fresh lawn to a full backyard redesign, we build outdoor spaces that add value and curb appeal.",
     points: ["New sod installation", "Garden bed design and planting", "Mulching and edging", "Interlocking stone walkways and patios", "Retaining walls and drainage solutions"] },
   { id: "snow-removal", name: "Snow Removal", desc: "Residential and commercial snow clearing all winter long.", query: "snow removal driveway plow",
